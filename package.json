@@ -7,12 +7,15 @@
     "compile": "hardhat compile",
     "deploy:local": "npm run compile && hardhat run scripts/deploy.ts --network localhost",
     "node": "hardhat node",
-    "test": "hardhat test"
+    "test": "npm run compile && hardhat test"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^2.0.0",
     "hardhat": "^2.11.2"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.7.3"
   }
 }
