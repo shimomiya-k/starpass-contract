@@ -5,7 +5,6 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 
 library MessageArrayLib {
     using MessageArrayLib for Messages;
-    using Counters for Counters.Counter;
 
     // 投稿文の配列
     struct Messages {
@@ -27,7 +26,7 @@ library MessageArrayLib {
     function pushMessage(Messages storage self, Message memory _element)
         internal
     {
-        if (!exists(self, _element)) {
+        if (!exists(self, _element.id)) {
             self._items.push(_element);
         }
     }
@@ -59,13 +58,13 @@ library MessageArrayLib {
         return self._items.length;
     }
 
-    function exists(Messages storage self, Message memory element)
+    function exists(Messages storage self, bytes32 element)
         internal
         view
         returns (bool)
     {
         for (uint i = 0; i < self.size(); i++) {
-            if (self._items[i].id == element.id) {
+            if (self._items[i].id == element) {
                 return true;
             }
         }
