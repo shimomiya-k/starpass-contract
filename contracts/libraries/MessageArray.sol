@@ -23,6 +23,7 @@ library MessageArrayLib {
         uint publishedAt;
     }
 
+    // 配列に投稿を追加
     function pushMessage(Messages storage self, Message memory _element)
         internal
     {
@@ -31,6 +32,7 @@ library MessageArrayLib {
         }
     }
 
+    // 配列から投稿を削除
     function removeMessage(Messages storage self, Message memory element)
         internal
         returns (bool)
@@ -45,6 +47,7 @@ library MessageArrayLib {
         return false;
     }
 
+    // indexから投稿を取得
     function getMessageAtIndex(Messages storage self, uint256 index)
         internal
         view
@@ -54,10 +57,12 @@ library MessageArrayLib {
         return self._items[index];
     }
 
+    // 投稿のサイズを取得
     function size(Messages storage self) internal view returns (uint256) {
         return self._items.length;
     }
 
+    // 既に存在しているか取得
     function exists(Messages storage self, bytes32 element)
         internal
         view
@@ -71,6 +76,7 @@ library MessageArrayLib {
         return false;
     }
 
+    // 全件取得
     function getAllMessages(Messages storage self)
         internal
         view
@@ -79,6 +85,8 @@ library MessageArrayLib {
         return self._items;
     }
 
+    // TODO: ページネーション
+    // ソート機能がフロントにあるため、使えなそう
     function fetchPage(
         Messages storage self,
         uint256 cursor,

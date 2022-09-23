@@ -1,5 +1,4 @@
-import { time, loadFixture } from "@nomicfoundation/hardhat-network-helpers";
-import { anyValue } from "@nomicfoundation/hardhat-chai-matchers/withArgs";
+import { loadFixture } from "@nomicfoundation/hardhat-network-helpers";
 import { expect } from "chai";
 import { ethers } from "hardhat";
 
@@ -12,6 +11,7 @@ describe("Social", function () {
   }
 
   describe("Deployment", function () {
+    // オーナー権限テスト
     it("Owner", async function () {
       const { social, owner, otherAccount } = await loadFixture(deploy);
       const ownerAddress = await social.owner();
@@ -20,6 +20,21 @@ describe("Social", function () {
       await expect(
         social.connect(otherAccount).updateMaxLength(1)
       ).to.be.revertedWith("Ownable: caller is not the owner");
+    });
+  });
+
+  describe("Account", function () {
+    // アカウント更新のテスト
+    it("Update", async function () {
+      const { social, owner, otherAccount } = await loadFixture(deploy);
+      var account = await social.getAccount(owner.address);
+      expect(account.id).to.equal("0x0000000000000000000000000000000000000000");
+      expect(account.name).to.equal("");
+
+      await social.updateAccount("taro");
+      var account = await social.getAccount(owner.address);
+      expect(account.id).to.equal(owner.address);
+      expect(account.name).to.equal("taro");
     });
   });
 

@@ -11,30 +11,32 @@ contract Social is Ownable {
     using Counters for Counters.Counter;
 
     // アカウント
-    // struct Account {
-    //     // アカウントID
-    //     address payable id;
-    //     // 名前
-    //     string name;
-    //     // アバター
-    //     string avatar;
-    //     // 経歴
-    //     string history;
-    // }
+    struct Account {
+        // アカウントID
+        address payable id;
+        // 名前
+        string name;
+    }
 
     // ユーザー
-    // mapping(address => Account) accounts;
+    mapping(address => Account) accounts;
+
     // ユーザーIDから「いいね」一覧
     mapping(address => EnumerableSet.Bytes32Set) addressTofavorites;
+
     // 投稿文
     MessageArrayLib.Messages messages;
+
     // 投稿文へのいいね数
     mapping(bytes32 => Counters.Counter) favorites;
+
     // 入力最大値
     uint public maxLength = 1000;
 
+    // 初期化
     constructor() {}
 
+    // 投稿
     function postMessage(string memory _text) public {
         bytes memory tempEmptyStringTest = bytes(_text);
         require(tempEmptyStringTest.length != 0, "Text is Empty");
@@ -55,6 +57,7 @@ contract Social is Ownable {
         messages.pushMessage(message);
     }
 
+    // 投稿全件取得
     function getAllMessages()
         public
         view
@@ -63,6 +66,7 @@ contract Social is Ownable {
         return messages.getAllMessages();
     }
 
+    // いいね
     function updateFavorite(bytes32 _id) public {
         require(messages.exists(_id), "Not Found Message");
 
@@ -81,6 +85,7 @@ contract Social is Ownable {
         _counter.increment();
     }
 
+    // いいね取得
     function getFavoriteCountFromMessage(bytes32 _id)
         public
         view
@@ -89,6 +94,18 @@ contract Social is Ownable {
         return favorites[_id];
     }
 
+    // アカウント更新
+    function updateAccount(string memory _name) public {
+        accounts[msg.sender] = Account({id: payable(msg.sender), name: _name});
+    }
+
+    // アカウント取得
+    function getAccount(address _address) public view returns (Account memory) {
+        return accounts[_address];
+    }
+
+    // Only Owner
+    // 最大文字数の変更
     function updateMaxLength(uint _maxLength) public onlyOwner {
         maxLength = _maxLength;
     }
