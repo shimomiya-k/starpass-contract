@@ -66,7 +66,7 @@ contract Social is Ownable {
         return messages.getAllMessages();
     }
 
-    // いいね
+    // いいね実行
     function updateFavorite(bytes32 _id) public {
         require(messages.exists(_id), "Not Found Message");
 
@@ -85,7 +85,7 @@ contract Social is Ownable {
         _counter.increment();
     }
 
-    // いいね取得
+    // メッセージIDからいいね数取得
     function getFavoriteCountFromMessage(bytes32 _id)
         public
         view
@@ -94,6 +94,7 @@ contract Social is Ownable {
         return favorites[_id];
     }
 
+    // アドレスからいいね一覧の取得
     function getAddressToFavorites() public view returns (bytes32[] memory) {
         EnumerableSet.Bytes32Set storage _favorites = addressToFavorites[
             msg.sender
