@@ -22,7 +22,7 @@ contract Social is Ownable {
     mapping(address => Account) accounts;
 
     // ユーザーIDから「いいね」一覧
-    mapping(address => EnumerableSet.Bytes32Set) addressTofavorites;
+    mapping(address => EnumerableSet.Bytes32Set) addressToFavorites;
 
     // 投稿文
     MessageArrayLib.Messages messages;
@@ -70,7 +70,7 @@ contract Social is Ownable {
     function updateFavorite(bytes32 _id) public {
         require(messages.exists(_id), "Not Found Message");
 
-        EnumerableSet.Bytes32Set storage _favorites = addressTofavorites[
+        EnumerableSet.Bytes32Set storage _favorites = addressToFavorites[
             msg.sender
         ];
         Counters.Counter storage _counter = favorites[_id];
@@ -92,6 +92,13 @@ contract Social is Ownable {
         returns (Counters.Counter memory)
     {
         return favorites[_id];
+    }
+
+    function getAddressToFavorites() public view returns (bytes32[] memory) {
+        EnumerableSet.Bytes32Set storage _favorites = addressToFavorites[
+            msg.sender
+        ];
+        return _favorites.values();
     }
 
     // アカウント更新
